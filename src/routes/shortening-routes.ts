@@ -12,7 +12,7 @@ class ShorteningRoutes extends Routes {
         this.router.patch('/api/shortened/:slug', ShortenedController.update)
         this.router.delete('/api/shortened/:slug', ShortenedController.remove)
         
-        //this.router.get('/:slug', )
+        this.router.get('/:slug', ShortenedController.visit)
     }
 }
 

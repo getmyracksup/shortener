@@ -43,7 +43,15 @@ export class MongoShortenedsRepository implements ShortenedsRepository {
         }
     }
 
-    async visitShortenedLink(slug: string): Promise<void> {
-        
+    async getOriginalURL(slug: string): Promise<string|undefined> {
+        try {
+            const shortened = await shortenedModel.findOne({slug}).exec()
+            
+            return (shortened) ? shortened.original_url : undefined
+
+        } catch (err) {
+            console.log(err)
+        }
+
     }
 }

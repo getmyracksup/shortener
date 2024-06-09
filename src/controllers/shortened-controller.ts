@@ -4,6 +4,7 @@ import { MongoShortenedsRepository } from "../repositories/mongo/mongo-shortened
 import { GetShortened } from "../services/shortening/get-shorteneds";
 import { RemoveShortened } from "../services/shortening/remove-shortened";
 import { UpdateShortenedURL, UpdateShortenedURLRequest } from "../services/shortening/update-shortened-url";
+import { VisitShortened } from "../services/shortening/visit-shortened";
 
 class ShortenedController {
     public async create(req: Request<{}, {}, CreateShortenedRequest, {}>, res: Response): Promise<Response> {
@@ -47,6 +48,18 @@ class ShortenedController {
             await (new RemoveShortened(new MongoShortenedsRepository()).remove(req.params.slug))
 
             return res.status(200).send()
+        } catch (err) {
+            return res.status(402).send(err)
+        }
+    }
+
+    public async visit(req: Request<{slug: string}, {}, {}, {}>, res: Response): Promise<Response|void> {
+        try {
+            const original_url = await (new VisitShortened(new MongoShortenedsRepository()).visit(req.params.slug))
+            if (!original_url) return res.status(500).send({err: "Failed to fetch original url."}) 
+            
+            
+            res.redirect(301, original_url)
         } catch (err) {
             return res.status(402).send(err)
         }
