@@ -4,6 +4,13 @@ export class RemoveShortened {
     constructor(private shortenedsRepository: ShortenedsRepository) {}
 
     async remove(slug: string) {
-        this.shortenedsRepository.delete(slug)
+
+        const shorteneds = await this.shortenedsRepository.getAll()
+
+        if (!shorteneds) throw new Error('Nenhum link encurtado encontrado')
+
+        if (!shorteneds.find((shortened) => shortened.slug == slug)) throw new Error('Nenhum link encurtado com slug dado.')
+
+        await this.shortenedsRepository.delete(slug)
     }
 }

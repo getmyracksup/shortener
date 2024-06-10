@@ -19,9 +19,7 @@ export class MemoryShortenedsRepository implements ShortenedsRepository {
     async update(original_url: string, slug: string): Promise<void> {
         const index = this.shorteneds.findIndex((shortened) => shortened.slug == slug)
 
-        if (index !== -1) this.shorteneds[index].originalUrl = original_url
-
-        throw new Error("URL nao encontrada!")
+        this.shorteneds[index].originalUrl = original_url
     }
 
     async delete(slug: string): Promise<void> {

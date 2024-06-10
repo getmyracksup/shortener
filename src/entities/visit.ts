@@ -1,9 +1,9 @@
 import { isValidIPV4 } from "../utils/validate-ip";
 
 export interface VisitProps {
-    country?: string,
-    region?: string,
-    city?: string,
+    country?: string|null,
+    region?: string|null,
+    city?: string|null,
     ip: string,
     slug: string,
     visited_at: Date
@@ -35,6 +35,10 @@ export class Visit {
 
     get country() {
         return this.props.country
+    }
+
+    get info() {
+        return this.props
     }
 
     get visitedAt() {

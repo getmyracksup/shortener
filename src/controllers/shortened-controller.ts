@@ -5,6 +5,8 @@ import { GetShortened } from "../services/shortening/get-shorteneds";
 import { RemoveShortened } from "../services/shortening/remove-shortened";
 import { UpdateShortenedURL, UpdateShortenedURLRequest } from "../services/shortening/update-shortened-url";
 import { VisitShortened } from "../services/shortening/visit-shortened";
+import { MongoVisitsRepository } from "../repositories/mongo/mongo-visits-repository";
+import { getLocation } from "../utils/get-location";
 
 class ShortenedController {
     public async create(req: Request<{}, {}, CreateShortenedRequest, {}>, res: Response): Promise<Response> {
@@ -54,8 +56,26 @@ class ShortenedController {
     }
 
     public async visit(req: Request<{slug: string}, {}, {}, {}>, res: Response): Promise<Response|void> {
+        let region, city, country;
+        const location = await getLocation(req.ip as string)
+
+        if (location) {
+            region = location.region
+            country = location.country,
+            city = location.city
+        }
+
         try {
-            const original_url = await (new VisitShortened(new MongoShortenedsRepository()).visit(req.params.slug))
+
+
+            const original_url = await (new VisitShortened(new MongoShortenedsRepository(), new MongoVisitsRepository()).visit({
+                ip: "179.242.252.116",
+                slug: req.params.slug,
+                visited_at: new Date(),
+                region,
+                city,
+                country 
+            }))
             if (!original_url) return res.status(500).send({err: "Failed to fetch original url."}) 
             
             

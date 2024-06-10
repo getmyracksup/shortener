@@ -43,6 +43,10 @@ export class Shortened {
         return this.props.slug
     }
 
+    set slug(slug: string) {
+        this.props.slug = slug
+    }
+
     get creator() {
         return this.props.creator
     }
