@@ -14,6 +14,18 @@ export class CreateCategory {
     async create({name, color}: CreateCategoryRequest) {
         const category = new Category({ name, color })
 
+        const categories = await this.categoriesRepository.getAll();
+
+        if (categories) {
+            categories.forEach((cat) => {
+                if (cat.name == name) {
+                    throw new Error("Categoria ja existente!")
+                }
+            })
+        }
+
         this.categoriesRepository.create(category)
+
+        return category
     }
 }

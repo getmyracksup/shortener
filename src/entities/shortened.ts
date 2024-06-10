@@ -51,6 +51,10 @@ export class Shortened {
         return this.props.original_url
     }
 
+    set originalUrl(original_url: string) {
+        this.props.original_url = original_url
+    }
+
     get visits() {
         return this.props.visits
     }

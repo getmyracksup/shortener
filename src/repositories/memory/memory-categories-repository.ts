@@ -5,7 +5,7 @@ type MemoryCategory = Category & {
     id: string
 }
 
-class MemoryCategoriesRepository implements CategoriesRepository {
+export class MemoryCategoriesRepository implements CategoriesRepository {
 
     private categories: MemoryCategory[] = []
 
